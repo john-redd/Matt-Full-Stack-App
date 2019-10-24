@@ -6,8 +6,8 @@ import Account from '../components/Account';
 
 export default (
   <Switch>
-    <Route exact to="/" component={Landing} />
-    <Route to="/register" component={Register} />
-    <Route to="/account" component={Account} />
+    <Route exact path="/" component={Landing} />
+    <Route path="/register" component={Register} />
+    <Route path="/account" component={Account} />
   </Switch>
 )

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {updateUser} from '../redux/reducer';
 
 class Landing extends Component {
   constructor(){
@@ -13,15 +15,21 @@ class Landing extends Component {
   }
 
   componentDidMount(){
-    const body = {
 
-    }
-
-    axios.post('/auth/login', body)
+  }
+  
+  handleLogin = () => {
+    axios.post('/auth/login', {email: this.state.email, password: this.state.password})
     .then(res => {
       // Redux action here
+      this.props.updateUser(res.data)
+      this.props.history.push('/account')
+      this.setState({
+        email: '',
+        password: ''
+      })
     })
-    .catch(err => console.log(err))
+    .catch(err => console.log(err))  
   }
 
   handleInput = (e) => {
@@ -31,6 +39,7 @@ class Landing extends Component {
   }
 
   render(){
+    // console.log(this.props)
     return (
       <div>
         <h1>Login Here</h1>
@@ -40,14 +49,25 @@ class Landing extends Component {
           onChange={e => this.handleInput(e)} />
         <input 
           value={this.state.password}
+          type="password"
           name="password"
           onChange={e => this.handleInput(e)} />
-        <button>Login</button>
+        <button onClick={this.handleLogin}>Login</button>
         <Link to="/register">Register</Link>
-        Landing
       </div>
     )
   }
 }
 
-export default Landing;
+const mapStateToProps = reduxState => {
+  const {user} = reduxState;
+  return {
+    user
+  }
+}
+
+const mapDispatchToProps = {
+  updateUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
